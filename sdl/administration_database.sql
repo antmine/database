@@ -1,9 +1,10 @@
 /**
-* Temporary value : 
+* Temporary value :
 *    CLIENT_PASSWORD.HASH_PASSWORD
 *
-* Not checked : 
+* Not checked :
 *  - email address
+*  birtday date client
 *  - url address
 **/
 
@@ -20,48 +21,89 @@ drop table if exists CLIENT_PASSWORD;
 drop table if exists WEBSITE;
 drop table if exists CLIENT_WEBSITE;
 
-/** 
-** Table ADMIN_CLIENT 
-**  The client's birtday date has to been between timestamp zero and now.
-**/
+/* Table ADMIN_CLIENT */
 create table ADMIN_CLIENT (
-    ID_CLIENT int not null,
+    ID_CLIENT int not null auto_increment,
     NAME varchar(255) not null,
     LASTNAME varchar(255) not null,
     EMAIL_ADDRESS varchar(255) not null,
     DATE_BIRTHDAY date not null,
-    STREET varchar(255) not null,
-    CITY varchar(255) not null,
-    STATE varchar(255) null,
-    ZIP_CODE varchar(255) not null,
-    COUNTRY varchar(255) not null,
+    DATE_CONNECTION date null,
+    HASH_PASSWORD varbinary(255) not null,
+    IS_VERIFIED bit not null default false,
+    IS_ENABLE bit not null default true,
     constraint PK_CLIENT primary key (ID_CLIENT),
-    constraint CT_DATE_BIRTHDAY check (DATE_BIRTHDAY  between date '1900-01-01' and sysdate)
+    constraint CT_DATE_BIRTHDAY check (DATE_BIRTHDAY  between date '1900-01-01' and sysdate),
+    constraint CT_ADMIN_CLIENT_EMAIL unique (EMAIL_ADDRESS)
 );
 
-/* Table CLIENT_PASSWORD */
-create table CLIENT_PASSWORD (
-    ID_CLIENT int not null,
-    HASH_PASSWORD varbinary(255),
-    constraint PK_CLIENT_PASSWORD primary key (ID_CLIENT),
-    constraint FK_CLIENT_PASSWORD_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT)
+/* Table ADDRESS */
+create table ADDRESS (
+  ID_CLIENT int not null,
+  STREET varchar(255) not null,
+  CITY varchar(255) not null,
+  STATE varchar(255) null,
+  ZIP_CODE varchar(255) not null,
+  COUNTRY varchar(255) not null,
+  constraint PK_ADDRESS primary key (ID_CLIENT),
+  constraint FK_ADDRESS_ID_CLIENT foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT) on delete cascade
 );
 
 /* Table WEBSITE */
 create table WEBSITE (
-    ID_WEBSITE int not null,
-    NAME varchar(255) null,
+    ID_WEBSITE char(10) not null,
+    NAME varchar(255) not null,
     URL varchar(255) not null,
+    DATE_CREATION datetime not null default CURRENT_TIMESTAMP,
+    DATE_UPDATE datetime null,
+    DATE_ACTIVE_UPDATE datetime null,
     IS_ACTIVE bit not null default true,
+    IS_ENABLE bit not null default false,
     constraint PK_WEBSITE primary key (ID_WEBSITE),
     constraint CT_WEBSITE_URL unique (URL)
 );
 
 /* Table CLIENT_WEBSITE */
 create table CLIENT_WEBSITE (
-    ID_WEBSITE int not null,
+    ID_WEBSITE char(10) not null,
     ID_CLIENT int not null,
-    constraint PK_WEBSITE primary key (ID_WEBSITE),
     constraint FK_CLIENT_WEBSITE_ID_WEBSITE foreign key (ID_WEBSITE) references WEBSITE(ID_WEBSITE),
-    constraint FK_CLIENT_WEBSITE_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT)
+    constraint FK_CLIENT_WEBSITE_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
+    constraint PK_WEBSITE primary key (ID_WEBSITE)
+);
+
+/* Table CRYPTO */
+create table CRYPTO_CURRENCY (
+    ID_CRYPTO char(3) not null,
+    NAME varchar(255),
+    constraint PK_CRYPTO primary key (ID_CRYPTO)
+);
+
+/* Table CRYPTO_USER */
+create table CRYPTO_CURRENCY_WEBSITE (
+    ID_CRYPTO char(3) not null,
+    ID_WEBSITE char(10) not null,
+    IS_ENABLE bit not null default true,
+    constraint FK_CRYPTO_CURRENCY_WEBSITE_ID_CRYPTO foreign key (ID_CRYPTO) references CRYPTO_CURRENCY(ID_CRYPTO),
+    constraint FK_CRYPTO_CURRENCY_WEBSITE_ID_WEBSITE foreign key (ID_WEBSITE) references WEBSITE(ID_WEBSITE),
+    constraint PK_CRYPTO_CURRENCY_WEBSITE primary key (ID_CRYPTO, ID_WEBSITE)
+);
+
+
+/* Table CLIENT_URL_ACTIVATION */
+create table CLIENT_URL_ACTIVATION (
+    ID_CLIENT int not null,
+    UUID varchar(255) not null,
+    EMAIL_ADDRESS varchar(25) not null,
+    constraint FK_CLIENT_URL_ACTIVATION_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
+    constraint PK_CLIENT_URL_ACTIVATION primary key (ID_CLIENT)
+);
+
+/* Table CLIENT_URL_RESET */
+create table CLIENT_URL_RESET (
+    ID_CLIENT int not null,
+    UUID varchar(255) not null,
+    EMAIL_ADDRESS varchar(25) not null,
+    constraint FK_CLIENT_URL_RESET_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
+    constraint PK_CLIENT_URL_RESET primary key (ID_CLIENT)
 );

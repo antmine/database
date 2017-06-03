@@ -11,19 +11,18 @@ drop table if exists CRYPTO_MONEY;
 drop table if exists COUNTRY_RANKING_TEMPLATE;
 drop table if exists OS_RANKING_TEMPLATE;
 drop table if exists STATS_WEBSITE_TEMPLATE;
-
-
-/* Table CRYPTO_MONEY */
-create table CRYPTO_MONEY (
-    ID_CRYPTO int not null,
-    ID_CLIENT int not null,
-    PERCENT int not null,
-    IS_PAID bit not null default 0,
-    constraint PK_CRYPTO_MONEY primary key (PERCENT),
-    constraint FK_CRYPTO_MONEY_ID_CRYPTO foreign key (ID_CRYPTO) references APPLICATION.CRYPTO(ID_CRYPTO),
-    constraint FK_CRYPTO_MONEY_ID_CLIENT foreign key (ID_CLIENT) references ADMINISTRATION.ADMIN_CLIENT(ID_CLIENT),
-    constraint CT_CRYPTO_MONEY_PERCENT check (PERCENT between 0 and 100)
-);
+-- 
+-- /* Table CRYPTO_MONEY */
+-- create table CRYPTO_MONEY (
+--     ID_CRYPTO char(3) not null,
+--     ID_CLIENT int not null,
+--     PERCENT int not null,
+--     IS_PAID bit not null default 0,
+--     constraint PK_CRYPTO_MONEY primary key (PERCENT),
+--     constraint FK_CRYPTO_MONEY_ID_CRYPTO foreign key (ID_CRYPTO) references APPLICATION.CRYPTO(ID_CRYPTO),
+--     constraint FK_CRYPTO_MONEY_ID_CLIENT foreign key (ID_CLIENT) references ADMINISTRATION.ADMIN_CLIENT(ID_CLIENT),
+--     constraint CT_CRYPTO_MONEY_PERCENT check (PERCENT between 0 and 100)
+-- );
 
 /**
 ** Table COUNTRY_RANKING_TEMPLATE

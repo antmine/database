@@ -21,7 +21,7 @@ create table MINER (
 /* Table MINER_WEBSITE */
 create table MINER_WEBSITE (
     ID_MINER int not null,
-    ID_WEBSITE int not null,
+    ID_WEBSITE char(10) not null,
     constraint PK_MINER_WEBSITE primary key (ID_MINER),
     constraint FK_MINER_WEBSITE_ID_MINER foreign key (ID_MINER) references MINER(ID_MINER),
     constraint FK_MINER_WEBSITE_ID_WEBSITE foreign key (ID_WEBSITE) references ADMINISTRATION.WEBSITE(ID_WEBSITE)
