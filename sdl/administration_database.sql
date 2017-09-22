@@ -57,6 +57,7 @@ create table WEBSITE (
     DATE_CREATION datetime not null default CURRENT_TIMESTAMP,
     DATE_UPDATE datetime null,
     DATE_ACTIVE_UPDATE datetime null,
+    DATE_CHECK datetime null,
     IS_ACTIVE bit not null default true,
     IS_ENABLE bit not null default false,
     constraint PK_WEBSITE primary key (ID_WEBSITE),
@@ -107,3 +108,23 @@ create table CLIENT_URL_RESET (
     constraint FK_CLIENT_URL_RESET_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
     constraint PK_CLIENT_URL_RESET primary key (ID_CLIENT)
 );
+
+/* Preocdure GET_WEBSITE_TO_CHECK
+/* This procedure returns the list of website to check
+/* The argument is the number of days whitout a recheck (defaut: 10) */
+delimiter //
+create procedure GET_WEBSITE_TO_CHECK(IN nbDays int) 
+BEGIN
+    select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
+        where DATE_CHECK_UPDATE is null
+        and DATE_CREATION != curdate()
+    union
+    select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as recheck
+        where IS_ENABLE = false
+        and DATE_CHECK_UPDATE >= now() - INTERVAL 1 DAY
+    union
+    select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
+        where IS_ENABLE = true
+        and DATE_CHECK_UPDATE <= now() - INTERVAL nbDays DAY;
+end //
+delimiter ;
