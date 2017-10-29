@@ -32,9 +32,7 @@ create table MINER_EVENT (
     ID_MINER int not null,
     TIME_EVENT timestamp not null default CURRENT_TIMESTAMP,
     URL varchar(255) not null,
-	TAB_ACTIVE boolean null,
-    ON_BATTERY boolean null,
-    DISCONNECTED boolean null,
+	IS_MINING boolean not null,
     constraint PK_MINER_EVENT primary key (ID_MINER, TIME_EVENT),
     constraint FK_MINER_EVENT_ID_MINER foreign key (ID_MINER) references MINER(ID_MINER)
 );

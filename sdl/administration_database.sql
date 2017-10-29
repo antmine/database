@@ -8,6 +8,7 @@
 *  - url address
 **/
 
+
 /* Create database */
 drop database if exists DASHBOARD;
 drop database  if exists APPLICATION;
@@ -111,20 +112,20 @@ create table CLIENT_URL_RESET (
 
 /* Preocdure GET_WEBSITE_TO_CHECK
 /* This procedure returns the list of website to check
-/* The argument is the number of days whitout a recheck (defaut: 10) */
+/* The argument is the number of days whitout a recheck (default: 10) */
 delimiter //
 create procedure GET_WEBSITE_TO_CHECK(IN nbDays int) 
 BEGIN
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
-        where DATE_CHECK_UPDATE is null
+        where DATE_CHECK is null
         and DATE_CREATION != curdate()
     union
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as recheck
         where IS_ENABLE = false
-        and DATE_CHECK_UPDATE >= now() - INTERVAL 1 DAY
+        and DATE_CHECK >= now() - INTERVAL 1 DAY
     union
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
         where IS_ENABLE = true
-        and DATE_CHECK_UPDATE <= now() - INTERVAL nbDays DAY;
+        and DATE_CHECK <= now() - INTERVAL nbDays DAY;
 end //
 delimiter ;
