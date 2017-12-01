@@ -96,7 +96,7 @@ create table CRYPTO_CURRENCY_WEBSITE (
 create table CLIENT_URL_ACTIVATION (
     ID_CLIENT int not null,
     UUID varchar(255) not null,
-    EMAIL_ADDRESS varchar(25) not null,
+    EMAIL_ADDRESS varchar(255) not null,
     constraint FK_CLIENT_URL_ACTIVATION_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
     constraint PK_CLIENT_URL_ACTIVATION primary key (ID_CLIENT)
 );
@@ -105,7 +105,7 @@ create table CLIENT_URL_ACTIVATION (
 create table CLIENT_URL_RESET (
     ID_CLIENT int not null,
     UUID varchar(255) not null,
-    EMAIL_ADDRESS varchar(25) not null,
+    EMAIL_ADDRESS varchar(255) not null,
     constraint FK_CLIENT_URL_RESET_CLIENT_ID foreign key (ID_CLIENT) references ADMIN_CLIENT(ID_CLIENT),
     constraint PK_CLIENT_URL_RESET primary key (ID_CLIENT)
 );
@@ -118,7 +118,7 @@ create procedure GET_WEBSITE_TO_CHECK(IN nbDays int)
 BEGIN
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
         where DATE_CHECK is null
-        and DATE_CREATION != curdate()
+        -- and DATE_CREATION != curdate()
     union
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as recheck
         where IS_ENABLE = false
