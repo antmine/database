@@ -116,16 +116,18 @@ create table CLIENT_URL_RESET (
 delimiter //
 create procedure GET_WEBSITE_TO_CHECK(IN nbDays int) 
 BEGIN
-    select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
-        where DATE_CHECK is null
-        -- and DATE_CREATION != curdate()
-    union
+    select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked;
+END
+//
+delimiter ;
+
+/*        where DATE_CHECK is null */
+/*        and DATE_CREATION != curdate() */
+/*    union
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as recheck
         where IS_ENABLE = false
         and DATE_CHECK >= now() - INTERVAL 1 DAY
     union
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked
         where IS_ENABLE = true
-        and DATE_CHECK <= now() - INTERVAL nbDays DAY;
-end //
-delimiter ;
+        and DATE_CHECK <= now() - INTERVAL nbDays DAY; */
