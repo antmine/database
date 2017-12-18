@@ -59,6 +59,7 @@ create table WEBSITE (
     DATE_UPDATE datetime null,
     DATE_ACTIVE_UPDATE datetime null,
     DATE_CHECK datetime null,
+    BITCOIN_AMOUNT float not null default 0,
     IS_ACTIVE bit not null default true,
     IS_ENABLE bit not null default false,
     constraint PK_WEBSITE primary key (ID_WEBSITE),
