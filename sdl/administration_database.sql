@@ -111,11 +111,19 @@ create table CLIENT_URL_RESET (
     constraint PK_CLIENT_URL_RESET primary key (ID_CLIENT)
 );
 
+/* Table CLIENT_URL_RESET */
+create table WALLET_AUTH (
+    ID_WALLET INT AUTO_INCREMENT NOT NULL,
+    TOKEN varchar(255) not null,
+    constraint PK_WALLET primary key (ID_WALLET)
+);
+
+
 /* Preocdure GET_WEBSITE_TO_CHECK
 /* This procedure returns the list of website to check
 /* The argument is the number of days whitout a recheck (default: 10) */
 delimiter //
-create procedure GET_WEBSITE_TO_CHECK(IN nbDays int) 
+create procedure GET_WEBSITE_TO_CHECK(IN nbDays int)
 BEGIN
     select ID_WEBSITE, URL from ADMINISTRATION.WEBSITE as notChecked;
 END
